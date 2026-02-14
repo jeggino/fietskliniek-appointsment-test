@@ -26,8 +26,8 @@ def send_email(subject, body, sender, recipients, password):
 
 name = st.text_input("Name")
 email_receiver = st.text_input("E-Mail")
-date = st.date_input("Date", datetime.date(2019, 7, 6))
-time_shift = st.time_input("Time", datetime.time(8, 45))
+date = st.date_input("Date")
+time_shift = st.time_input("Time")
 link = "https://payment-links.mollie.com/payment/QRHiqREMEec7PXeByiszR"
 
 #---
