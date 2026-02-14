@@ -28,7 +28,7 @@ Regards, Fietsklienik people
 if st.button("Send Email"):
     try:
         msg = MIMEText(body)
-        msg['From'] = email_sender
+        msg['From'] = st.secrets["EMAIL"]
         msg['To'] = email_receiver
         msg['Subject'] = subject
 
