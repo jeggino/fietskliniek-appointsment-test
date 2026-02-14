@@ -16,10 +16,8 @@ def send_email(subject, body, sender, recipients, password):
         msg['To'] = recipients
         # Connect to Gmail's SMTP server using SSL
         with smtplib.SMTP_SSL('smtp.gmail.com', 465) as smtp_server:
-            smtp_server.starttls()
             smtp_server.login(sender, password)
             smtp_server.sendmail(sender, recipients, msg.as_string())
-            smtp_server.quit()
         st.markdown("You have booked your appointment! Please check your email")
     except:
         st.markdown("Please check your email")
