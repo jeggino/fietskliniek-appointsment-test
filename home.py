@@ -4,8 +4,6 @@ from email.mime.text import MIMEText
 
 
 # Taking inputs
-email_sender = st.secrets["EMAIL"]
-password = st.secrets["PASSWORD"]
 name = st.text_input("Name")
 email_receiver = st.text_input("E-Mail")
 date = st.date_input("Date")
@@ -37,7 +35,7 @@ if st.button("Send Email"):
         server = smtplib.SMTP('smtp.gmail.com', 587)
         server.starttls()
         server.login(st.secrets["EMAIL"], st.secrets["PASSWORD"])
-        server.sendmail(email_sender, email_receiver, msg.as_string())
+        server.sendmail(st.secrets["EMAIL"], email_receiver, msg.as_string())
         server.quit()
 
         st.success('Email sent successfully! 🚀')
