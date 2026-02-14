@@ -5,8 +5,8 @@ from email.mime.text import MIMEText
 
 # Taking inputs
 name = st.text_input("Name")
-email_receiver = st.text_input("E-Mail")
-email_receiver_test = st.text_input("Rewrite your E-Mail")
+email_receiver = st.text_input("E-Mail","wirte your email")
+email_receiver_test = st.text_input("Rewrite your E-Mail","rewirte your email")
 
 if email_receiver != email_receiver_test:
     st.write("YOU E-MAIL DOESN'T MATCH, PLEASE CHECK IT!")
