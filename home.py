@@ -1,46 +1,50 @@
-""" 
-If you've two-step verification enabled, your regular password won't work. Instead, generate an app-specific password:
-
-- Go to your Google Account.
-- On the left navigation panel, click on "Security."
-- Under "Signing in to Google," select "App Passwords." You might need to sign in again.
-- At the bottom, choose the app and device you want the app password for, then select "Generate."
-- Use this app password in your Streamlit app.
-
-"""
-
 import streamlit as st
 import smtplib
 from email.mime.text import MIMEText
 
-st.title('Send Streamlit SMTP Email 💌 🚀')
-
-st.markdown("""
-**Enter your email, subject, and email body then hit send to receive an email from `summittradingcard@gmail.com`!**
-""")
 
 # Taking inputs
-email_sender = st.text_input('From', 'summittradingcard@gmail.com', disabled=True)
-email_receiver = st.text_input('To')
-subject = st.text_input('Subject')
-body = st.text_area('Body')
+email_sender = st.secrets["EMAIL"]
+password = st.secrets["PASSWORD"]
 
-# Hide the password input
-password = st.text_input('Password', type="password", disabled=True)  
+def send_email(subject, body, sender, recipients, password):
+    try:
+        # Create a MIMEText object with the body of the email
+        msg = MIMEText(body)
+        msg['Subject'] = subject
+        msg['From'] = sender
+        msg['To'] = ', '.join(recipients)
+        # Connect to Gmail's SMTP server using SSL
+        with smtplib.SMTP_SSL('smtp.gmail.com', 465) as smtp_server:
+           smtp_server.login(sender, password)
+           smtp_server.sendmail(sender, recipients, msg.as_string())
+        st.markdown("You have booked your appointment! Please check your email")
+    except:
+        st.markdown("Please check your email")
+
+
+
+name = st.text_input("Name")
+email_receiver = st.text_input("E-Mail")
+date = st.date_input("Date", datetime.date(2019, 7, 6))
+time_shift = st.time_input("Time", datetime.time(8, 45))
+link = "https://payment-links.mollie.com/payment/QRHiqREMEec7PXeByiszR"
+
+#---
+
+subject = "Fietsklieniek appointment"
+body = f"""
+Dear {name},
+
+you have booked an appont on {date} at {time_shift}.
+Please, pay your fee at this link {link}.
+
+If you need to change or cancel your appointment, please use the dedicated form. 
+If you have any questions, you can also contact us by phone or email.
+
+Regards, Fietsklienik people
+"""
 
 if st.button("Send Email"):
-    try:
-        msg = MIMEText(body)
-        msg['From'] = email_sender
-        msg['To'] = email_receiver
-        msg['Subject'] = subject
+    send_email(subject, body, email_sender, email_receiver, password)
 
-        server = smtplib.SMTP('smtp.gmail.com', 587)
-        server.starttls()
-        server.login(st.secrets["email"]["gmail"], st.secrets["email"]["password"])
-        server.sendmail(email_sender, email_receiver, msg.as_string())
-        server.quit()
-
-        st.success('Email sent successfully! 🚀')
-    except Exception as e:
-        st.error(f"Failed to send email: {e}")
