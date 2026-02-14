@@ -32,7 +32,7 @@ if st.button("Send Email"):
         msg['To'] = email_receiver
         msg['Subject'] = subject
 
-        server = smtplib.SMTP('smtp.gmail.com', 465)
+        server = smtplib.SMTP('smtp.gmail.com', 587)
         server.starttls()
         server.login(st.secrets["EMAIL"], st.secrets["PASSWORD"])
         resp = server.rcpt(email_receiver)
