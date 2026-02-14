@@ -6,24 +6,6 @@ from email.mime.text import MIMEText
 # Taking inputs
 email_sender = st.secrets["EMAIL"]
 password = st.secrets["PASSWORD"]
-
-def send_email(subject, body, sender, recipients, password):
-    try:
-        # Create a MIMEText object with the body of the email
-        msg = MIMEText(body)
-        msg['Subject'] = subject
-        msg['From'] = sender
-        msg['To'] = recipients
-        # Connect to Gmail's SMTP server using SSL
-        with smtplib.SMTP_SSL('smtp.gmail.com', 465) as smtp_server:
-            smtp_server.login(sender, password)
-            smtp_server.sendmail(sender, recipients, msg.as_string())
-        st.markdown("You have booked your appointment! Please check your email")
-    except:
-        st.markdown("Please check your email")
-
-
-
 name = st.text_input("Name")
 email_receiver = st.text_input("E-Mail")
 date = st.date_input("Date")
@@ -46,5 +28,17 @@ Regards, Fietsklienik people
 """
 
 if st.button("Send Email"):
-    send_email(subject, body, email_sender, email_receiver, password)
+    try:
+        # Create a MIMEText object with the body of the email
+        msg = MIMEText(body)
+        msg['Subject'] = subject
+        msg['From'] = email_sender
+        msg['To'] = email_receiver
+        # Connect to Gmail's SMTP server using SSL
+        with smtplib.SMTP_SSL('smtp.gmail.com', 465) as smtp_server:
+            smtp_server.login(email_sender, password)
+            smtp_server.sendmail(email_sender, email_receiver, msg.as_string())
+        st.markdown("You have booked your appointment! Please check your email")
+    except:
+        st.markdown("Please check your email")
 
