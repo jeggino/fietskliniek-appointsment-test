@@ -29,16 +29,18 @@ Regards, Fietsklienik people
 
 if st.button("Send Email"):
     try:
-        # Create a MIMEText object with the body of the email
         msg = MIMEText(body)
-        msg['Subject'] = subject
         msg['From'] = email_sender
         msg['To'] = email_receiver
-        # Connect to Gmail's SMTP server using SSL
-        with smtplib.SMTP_SSL('smtp.gmail.com', 465) as smtp_server:
-            smtp_server.login(email_sender, password)
-            smtp_server.sendmail(email_sender, email_receiver, msg.as_string())
-        st.markdown("You have booked your appointment! Please check your email")
-    except:
-        st.markdown("Please check your email")
+        msg['Subject'] = subject
+
+        server = smtplib.SMTP('smtp.gmail.com', 587)
+        server.starttls()
+        server.login(st.secrets["EMAIL"], st.secrets["PASSWORD"])
+        server.sendmail(email_sender, email_receiver, msg.as_string())
+        server.quit()
+
+        st.success('Email sent successfully! 🚀')
+    except Exception as e:
+        st.error(f"Failed to send email: {e}")
 
