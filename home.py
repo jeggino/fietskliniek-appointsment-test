@@ -1,11 +1,18 @@
 import streamlit as st
 import smtplib
 from email.mime.text import MIMEText
+from email_validator import validate_email, EmailNotValidError
 
 
 # Taking inputs
 name = st.text_input("Name")
 email_receiver = st.text_input("E-Mail")
+email_receiver_test = st.text_input("Rewrite your E-Mail")
+
+if email_receiver != email_receiver_test:
+    st.write("YOU E-MAIL DOESN'T MATCH, PLEASE CHECK IT!")
+    st.stop()
+    
 date = st.date_input("Date")
 time_shift = st.time_input("Time")
 link = "https://payment-links.mollie.com/payment/QRHiqREMEec7PXeByiszR"
@@ -26,21 +33,18 @@ Regards, Fietsklienik people
 """
 
 if st.button("Send Email"):
-    try:
-        msg = MIMEText(body)
-        msg['From'] = st.secrets["EMAIL"]
-        msg['To'] = email_receiver
-        msg['Subject'] = subject
+    msg = MIMEText(body)
+    msg['From'] = st.secrets["EMAIL"]
+    msg['To'] = email_receiver
+    msg['Subject'] = subject
 
-        server = smtplib.SMTP('smtp.gmail.com', 587)
-        server.starttls()
-        server.login(st.secrets["EMAIL"], st.secrets["PASSWORD"])
-        resp = server.rcpt(email_receiver)
-        st.write(resp)
-        server.sendmail(st.secrets["EMAIL"], email_receiver, msg.as_string())
-        server.quit()
+    server = smtplib.SMTP('smtp.gmail.com', 587)
+    server.starttls()
+    server.login(st.secrets["EMAIL"], st.secrets["PASSWORD"])
+    resp = server.rcpt(email_receiver)
+    server.sendmail(st.secrets["EMAIL"], email_receiver, msg.as_string())
+    server.quit()
 
-        st.success('Email sent successfully! 🚀')
-    except Exception as e:
-        st.error(f"Failed to send email: {e}")
+    st.success('You have booked you appointment! Please check the email for the payment')
+
 
