@@ -35,7 +35,7 @@ if st.button("Send Email"):
         server = smtplib.SMTP('smtp.gmail.com', 587)
         server.starttls()
         server.login(st.secrets["EMAIL"], st.secrets["PASSWORD"])
-        resp = server.rcpt(recipients)
+        resp = server.rcpt(email_receiver)
         st.write(resp)
         server.sendmail(st.secrets["EMAIL"], email_receiver, msg.as_string())
         server.quit()
