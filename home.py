@@ -1,7 +1,6 @@
 import streamlit as st
 import smtplib
 from email.mime.text import MIMEText
-from email_validator import validate_email, EmailNotValidError
 
 
 # Taking inputs
