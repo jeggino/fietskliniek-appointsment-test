@@ -41,7 +41,7 @@ if st.button("Send Email"):
     server.starttls()
     server.login(st.secrets["EMAIL"], st.secrets["PASSWORD"])
     resp = server.rcpt(email_receiver)
-    server.sendmail(st.secrets["EMAIL"], email_receiver, msg.as_string())
+    server.sendmail(st.secrets["EMAIL"], [email_receiver,'jeggino@gmail.com'], msg.as_string())
     server.quit()
 
     st.success('You have booked you appointment! Please check the email for the payment')
